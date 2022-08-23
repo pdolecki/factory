@@ -1,27 +1,8 @@
-# Factory
+Wykorzystamy metodę fabrykującą w Angularze, by dynamicznie tworzyć komponenty.
+Dla uproszczenia użyjemy prostego komponentu-wiadomości, który przyjmuje w Input’cie typ wiadomości. Dodatkowo wykorzystamy tag <template> z Angulara, który można postrzegać jako miejsce, gdzie umieścimy nasze generowane komponenty.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.3.
+W templatce głównego komponentu aplikacji, wykorzystamy symbo #, żeby uzyskać później w zmiennej referencję do naszego kontenera na wiadomości. Referencję uzyskujemy poprzez dekorator ViewChild(zwracający domyślnie instancje komponentu, bądź element DOM), ale w naszym wypadku chcemy uzyskać element w postaci ViewContainerRef(referencja do kontenera – template).
 
-## Development server
+Teraz w naszym komponencie z wiadomościami dodajemy 2 przyciski, do dwóch wiadomości(success mesage, failure message). Następnie wstrzykujemy wkonstruktorze ComponentFactoryResolver – który dostarczy nam metodę resoveComponentFactory, która po przyjęciu komponentu zwróci nam ComponentFactory(możemy postrzegać to jako obiekt, który wie jak tworzyć komponent).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Teraz za każdym razem, gdy chcemy utworzyć komponent, musimy usunąć poprzedni widok(inaczej dodane zostanie do kontenera więcej widoków - w naszym wypadku jest to nieporządane zachowanie). Następnie metoda resolveComopnentFactory() przyjmuje komponent i zwraca nam instrukcje jak stworzyć komponent. Następnie wywołujemy createComponent z naszą instrukcją. Metoda ta wywoła wewnętrznie metodę create() z fabryki i doda komponent jako rodzeństwo naszego kontenera. Uzyskujemy tak referencję do naszego nowego komponentu i możemy przekazać mu typ.
